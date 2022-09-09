@@ -1,0 +1,204 @@
+#Base Model
+
+# Import useful libraries
+import math
+import matplotlib.pyplot as plt
+
+# use `ggplot` style for all plots, which has gray background and gridlines 
+plt.style.use('ggplot')
+
+# BASE MODEL
+# constants
+DT = 0.01
+T_MAX = 14
+STEPS = int(T_MAX/DT)
+BETA = 0.00218
+MU = 0.4404
+
+# Initial conditions
+S_0 = 762
+I_0 = 1
+R_0 = 0
+
+# Arrays
+T = [0,]
+S = [S_0,]
+I = [I_0,]
+R = [R_0,]
+
+for i in range(STEPS):
+  T.append(T[i]+DT)
+  S.append(S[i]-BETA*S[i]*I[i]*DT)
+  I.append(I[i]+(BETA*S[i]*I[i]-MU*I[i])*DT)
+  R.append(R[i]+MU*I[i]*DT)
+# Plot the graph
+plt.plot(T,I,label='Infected')
+plt.plot(T,S,label='Susceptible')
+plt.plot(T,R,label='Recovered')
+plt.legend()
+plt.title("Base SIR model")
+
+
+
+#Vaccination rate of 1%
+
+# Import useful libraries
+import math
+import matplotlib.pyplot as plt
+
+# use `ggplot` style for all plots, which has gray background and gridlines 
+plt.style.use('ggplot')
+
+# BASE MODEL
+# constants
+DT = 0.01
+T_MAX = 14
+STEPS = int(T_MAX/DT)
+BETA = 0.00218
+MU = 0.4404
+
+# Initial conditions
+S_0 = 762
+I_0 = 1
+R_0 = 0
+
+# New constant
+DELTA = 0.01 #Vaccination rate 1
+
+
+# Arrays
+T = [0,]
+Sa = [S_0,]
+Ia = [I_0,]
+Ra = [R_0,]
+
+for i in range(STEPS):
+  T.append(T[i]+DT)
+  Sa.append(Sa[i]+(-BETA*Sa[i]*Ia[i]-DELTA*Sa[i])*DT)
+  Ia.append(Ia[i]+(BETA*Sa[i]*Ia[i]-MU*Ia[i])*DT)
+  Ra.append(Ra[i]+(MU*Ia[i]+DELTA*Sa[i])*DT)
+
+# axis, defined above, has handles for each subplots. We will plot the base model arrays in the first subplot
+plt.plot(T,I,label="Infected",c="red")
+plt.plot(T,S,label="Susceptible",c="green")
+plt.plot(T,R,label="Recovered",c="orange")
+
+# axis, defined above, has handles for each subplots. We will plot the base model arrays in the first subplot
+plt.plot(T,Ia,label="Infected - modified VR1",c="red",linestyle="dashed")
+plt.plot(T,Sa,label="Susceptible - modified VR1",c="green",linestyle="dashed")
+plt.plot(T,Ra,label="Recovered - modified VR1",c="orange",linestyle="dashed")
+plt.xlabel("Time (days)")
+plt.ylabel("Number of Individuals")
+plt.title("Comparing the effect of vaccination on base SIR model")
+plt.legend()
+
+
+
+
+#Vaccination rate of 5%
+
+# Import useful libraries
+import math
+import matplotlib.pyplot as plt
+
+# use `ggplot` style for all plots, which has gray background and gridlines 
+plt.style.use('ggplot')
+
+# BASE MODEL
+# constants
+DT = 0.01
+T_MAX = 14
+STEPS = int(T_MAX/DT)
+BETA = 0.00218
+MU = 0.4404
+
+# Initial conditions
+S_0 = 762
+I_0 = 1
+R_0 = 0
+
+# New constant
+DELTA_2=0.05 #Vaccination rate 2
+
+T = [0,]
+Sa_2 = [S_0,]
+Ia_2 = [I_0,]
+Ra_2 = [R_0,]
+
+for i in range(STEPS):
+  T.append(T[i]+DT)
+  Sa_2.append(Sa_2[i]+(-BETA*Sa_2[i]*Ia_2[i]-DELTA_2*Sa_2[i])*DT)
+  Ia_2.append(Ia_2[i]+(BETA*Sa_2[i]*Ia_2[i]-MU*Ia_2[i])*DT)
+  Ra_2.append(Ra_2[i]+(MU*Ia_2[i]+DELTA_2*Sa_2[i])*DT)
+
+# axis, defined above, has handles for each subplots. We will plot the base model arrays in the first subplot
+plt.plot(T,I,label="Infected",c="red")
+plt.plot(T,S,label="Susceptible",c="green")
+plt.plot(T,R,label="Recovered",c="orange")
+
+
+# axis, defined above, has handles for each subplots. We will plot the base model arrays in the first subplot
+plt.plot(T,Ia_2,label="Infected - modified VR2",c="red",linestyle="dashed")
+plt.plot(T,Sa_2,label="Susceptible - modified VR2",c="green",linestyle="dashed")
+plt.plot(T,Ra_2,label="Recovered - modified VR2",c="orange",linestyle="dashed")
+plt.xlabel("Time (days)")
+plt.ylabel("Number of Individuals")
+plt.title("Comparing the effect of vaccination on base SIR model")
+plt.legend()
+
+
+#Mortality and Reinfection
+
+# Import useful libraries
+import math
+import matplotlib.pyplot as plt
+
+# use `ggplot` style for all plots, which has gray background and gridlines 
+plt.style.use('ggplot')
+
+# BASE MODEL
+# constants
+DT = 0.01
+T_MAX = 14
+STEPS = int(T_MAX/DT)
+BETA = 0.00218
+MU = 0.4404
+
+# Initial conditions
+S_0 = 762
+I_0 = 1
+R_0 = 0
+D_0=0 #Initially there are no dead people
+
+# New constant
+ALPHA= 0.05 #Mortality rate
+GAMMA=0.25 #Re-susceptibility rate
+
+# Arrays
+T = [0,]
+Sb = [S_0,]
+Ib = [I_0,]
+Rb = [R_0,]
+D= [D_0,]
+for i in range(STEPS):
+  T.append(T[i]+DT)
+  Sb.append(Sb[i]+(-BETA*Sb[i]*Ib[i]+GAMMA*Rb[i])*DT)
+  Ib.append(Ib[i]+(BETA*Sb[i]*Ib[i]-MU*Ib[i]-ALPHA*Ib[i])*DT)
+  Rb.append(Rb[i]+(MU*Ib[i]-GAMMA*Rb[i])*DT)
+  D.append(D[i]+(ALPHA*Ib[i])*DT)
+
+# axis, defined above, has handles for each subplots. We will plot the base model arrays in the first subplot
+plt.plot(T,I,label="Infected",c="red")
+plt.plot(T,S,label="Susceptible",c="green")
+plt.plot(T,R,label="Recovered",c="orange")
+
+
+# axis, defined above, has handles for each subplots. We will plot the base model arrays in the first subplot
+plt.plot(T,Ib,label="Infected - modified",c="red",linestyle="dashed")
+plt.plot(T,Sb,label="Susceptible - modified",c="green",linestyle="dashed")
+plt.plot(T,Rb,label="Recovered - modified",c="orange",linestyle="dashed")
+plt.plot(T,D,label="Dead",c="blue",linestyle='dashed')
+plt.title("Comparing the effect of mortality and re-susceptibility on base SIR model")
+plt.xlabel("Time (days)")
+plt.ylabel("Number of Individuals")
+plt.legend()
